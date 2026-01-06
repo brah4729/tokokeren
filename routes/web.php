@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\PaymentController;
@@ -7,6 +8,32 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\SellerStockController;
 use App\Http\Controllers\Admin\ProductController as AdminProductController;  // ← Give it a different name
 use Illuminate\Support\Facades\Route;
+
+// =====================
+// Authentication Routes
+// =====================
+
+// Guest routes (only accessible when not logged in)
+Route::middleware('guest')->group(function () {
+    Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
+    Route::post('/login', [AuthController::class, 'login']);
+    Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
+    Route::post('/register', [AuthController::class, 'register']);
+});
+
+// Email verification routes (must be logged in)
+Route::middleware('auth')->group(function () {
+    Route::get('/verify', [AuthController::class, 'showVerifyForm'])->name('verification.notice');
+    Route::post('/verify', [AuthController::class, 'verify'])->name('verification.verify');
+    Route::post('/verify/resend', [AuthController::class, 'resendCode'])->name('verification.resend');
+});
+
+// Logout (must be logged in)
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth');
+
+// =====================
+// Public Routes
+// =====================
 
 // Home page
 Route::get('/', [ProductController::class, 'index'])->name('home');
