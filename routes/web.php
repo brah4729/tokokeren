@@ -54,10 +54,14 @@ Route::middleware('auth')->group(function () {
     // Checkout & Payment
     Route::get('/checkout', [PaymentController::class, 'checkout'])->name('checkout');
     Route::post('/payment/process', [PaymentController::class, 'processPayment'])->name('payment.process');
+    Route::get('/checkout/success/{order}', [PaymentController::class, 'success'])->name('checkout.success');
     
     // Orders
     Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
     Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
+
+    // Profile
+    Route::get('/account', [\App\Http\Controllers\ProfileController::class, 'show'])->name('profile.show');
 });
 
 // Admin routes (require login)

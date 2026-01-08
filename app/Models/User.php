@@ -22,6 +22,22 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
+     * Get the products listed by the user (seller).
+     */
+    public function products(): HasMany
+    {
+        return $this->hasMany(Product::class, 'seller_id');
+    }
+
+    /**
+     * Get the reviews written by the user.
+     */
+    public function reviews(): HasMany
+    {
+        return $this->hasMany(Review::class);
+    }
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var list<string>

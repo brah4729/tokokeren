@@ -23,6 +23,7 @@
                     <a href="{{ route('cart.index') }}" class="text-gray-700 hover:text-blue-600">Cart</a>
                     
                     @auth
+                        <a href="{{ route('profile.show') }}" class="text-gray-700 hover:text-blue-600 font-medium">Account</a>
                         <a href="{{ route('orders.index') }}" class="text-gray-700 hover:text-blue-600">Orders</a>
                         <a href="{{ route('seller.stock.index') }}" class="text-gray-700 hover:text-blue-600">Stock</a>
                         <a href="{{ route('admin.products.create') }}" class="text-gray-700 hover:text-blue-600">➕ Add Product</a>

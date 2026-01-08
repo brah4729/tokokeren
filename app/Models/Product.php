@@ -64,4 +64,23 @@ class Product extends Model
             'user_id' => auth()->id(),
         ]);
     }
+
+    /**
+     * Reduce stock from the product.
+     */
+    public function reduceStock(int $quantity, ?string $notes = null): void
+    {
+        if ($this->stock < $quantity) {
+            throw new \Exception("Insufficient stock for product {$this->name}");
+        }
+
+        $this->decrement('stock', $quantity);
+        
+        $this->stockMovements()->create([
+            'quantity' => $quantity,
+            'type' => 'out',
+            'notes' => $notes,
+            'user_id' => auth()->id(),
+        ]);
+    }
 }

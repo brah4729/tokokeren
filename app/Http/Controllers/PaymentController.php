@@ -22,7 +22,7 @@ class PaymentController extends Controller
     public function processPayment(Request $request)
     {
         $request->validate([
-            'payment_method' => 'required|in:stripe,paypal',
+            'payment_method' => 'required|in:stripe,paypal,mock',
             'stripeToken' => 'required_if:payment_method,stripe'
         ]);
 
@@ -66,6 +66,12 @@ class PaymentController extends Controller
                     'stripe_payment_id' => $charge->id,
                     'status' => 'paid'
                 ]);
+            } elseif ($request->payment_method === 'mock') {
+                $order->update([
+                    'payment_status' => 'paid',
+                    'status' => 'paid',
+                    'payment_method' => 'mock_test_payment'
+                ]);
             }
 
             foreach ($cart->items as $item) {
@@ -76,13 +82,22 @@ class PaymentController extends Controller
 
             DB::commit();
 
-            return redirect()->route('orders.show', $order)
-                ->with('success', 'Payment successful!');
+            DB::commit();
+
+            return redirect()->route('checkout.success', $order);
 
         } catch (\Exception $e) {
             DB::rollBack();
             return back()->with('error', 'Payment failed: ' . $e->getMessage());
         }
+    }
+
+    public function success(Order $order)
+    {
+        if ($order->user_id !== auth()->id()) {
+            abort(403);
+        }
+        return view('checkout.success', compact('order'));
     }
 
     private function getCart()
