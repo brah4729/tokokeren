@@ -45,6 +45,7 @@ Route::get('/products/{product}', [ProductController::class, 'show'])->name('pro
 Route::prefix('cart')->group(function () {
     Route::get('/', [CartController::class, 'index'])->name('cart.index');
     Route::post('/add', [CartController::class, 'add'])->name('cart.add');
+    Route::patch('/update/{item}', [CartController::class, 'update'])->name('cart.update');
     Route::delete('/remove/{item}', [CartController::class, 'remove'])->name('cart.remove');
 });
 

@@ -16,12 +16,13 @@ class Cart extends Model
     public function addItem($productId, $quantity = 1)
     {
         $product = Product::findOrFail($productId);
-        
-        if ($product->stock < $quantity) {
-            throw new \Exception('Insufficient stock');
-        }
-
         $cartItem = $this->items()->where('product_id', $productId)->first();
+        
+        $currentQty = $cartItem ? $cartItem->quantity : 0;
+        
+        if ($product->stock < ($currentQty + $quantity)) {
+            throw new \Exception('Insufficient stock available. You already have ' . $currentQty . ' in cart.');
+        }
 
         if ($cartItem) {
             $cartItem->increment('quantity', $quantity);

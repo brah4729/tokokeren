@@ -11,20 +11,22 @@
     @else
         <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
             @foreach($products as $product)
-                <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow">
-                    <div class="relative">
+                <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow group">
+                    <a href="{{ route('products.show', $product) }}" class="block relative">
                         <img src="{{ $product->image ?? 'https://via.placeholder.com/300' }}" 
                              alt="{{ $product->name }}" 
-                             class="w-full h-48 object-cover">
+                             class="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105">
                         
                         <!-- Hover description -->
-                        <div class="absolute inset-0 bg-black bg-opacity-90 opacity-0 hover:opacity-100 transition-opacity flex items-center justify-center p-4">
+                        <div class="absolute inset-0 bg-black bg-opacity-90 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center p-4">
                             <p class="text-white text-sm text-center">{{ $product->brief_description }}</p>
                         </div>
-                    </div>
+                    </a>
 
                     <div class="p-4">
-                        <h3 class="font-semibold text-lg mb-2">{{ $product->name }}</h3>
+                        <a href="{{ route('products.show', $product) }}" class="block">
+                            <h3 class="font-semibold text-lg mb-2 hover:text-indigo-600 transition-colors">{{ $product->name }}</h3>
+                        </a>
                         <div class="flex justify-between items-center mb-4">
                             <span class="text-xl font-bold text-blue-600">${{ number_format($product->price, 2) }}</span>
                             <span class="text-sm text-gray-500">Stock: {{ $product->stock }}</span>

@@ -25,4 +25,43 @@ class Product extends Model
     {
         return $this->belongsTo(Category::class);
     }
+
+    /**
+     * Get the seller (user) of the product.
+     */
+    public function seller(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'seller_id');
+    }
+
+    /**
+     * Get the reviews for the product.
+     */
+    public function reviews(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Review::class);
+    }
+
+    /**
+     * Get the stock movements for the product.
+     */
+    public function stockMovements(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(StockMovement::class);
+    }
+
+    /**
+     * Add stock to the product.
+     */
+    public function addStock(int $quantity, ?string $notes = null): void
+    {
+        $this->increment('stock', $quantity);
+        
+        $this->stockMovements()->create([
+            'quantity' => $quantity,
+            'type' => 'in',
+            'notes' => $notes,
+            'user_id' => auth()->id(),
+        ]);
+    }
 }
