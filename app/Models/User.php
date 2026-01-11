@@ -38,6 +38,14 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
+     * Get the orders for the user.
+     */
+    public function orders(): HasMany
+    {
+        return $this->hasMany(Order::class);
+    }
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var list<string>

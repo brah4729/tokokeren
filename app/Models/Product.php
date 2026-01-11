@@ -16,6 +16,7 @@ class Product extends Model
         'image',
         'category_id',
         'is_active',
+        'seller_id',
     ];
 
     /**
@@ -56,7 +57,7 @@ class Product extends Model
     public function addStock(int $quantity, ?string $notes = null): void
     {
         $this->increment('stock', $quantity);
-        
+
         $this->stockMovements()->create([
             'quantity' => $quantity,
             'type' => 'in',
@@ -75,7 +76,7 @@ class Product extends Model
         }
 
         $this->decrement('stock', $quantity);
-        
+
         $this->stockMovements()->create([
             'quantity' => $quantity,
             'type' => 'out',
